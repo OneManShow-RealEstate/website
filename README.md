@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# One Man Show – Website
 
-## Getting Started
+Marketing website and product documentation for One Man Show, a platform for real estate brokers.
 
-First, run the development server:
+## Stack
+
+Next.js (App Router), TypeScript, Tailwind CSS and shadcn/ui. The site is in Hebrew and right-to-left. Hosted on Vercel.
+
+## Getting started
+
+Requires Node.js 24.
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run `npm run build` and `npm run lint` before opening a PR.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project structure
 
-## Learn More
+- `src/app/(marketing)/` – marketing pages
+- `src/app/docs/` – product documentation (later)
+- `src/components/ui/` – shadcn components
+- `src/components/layout/` – Header, Footer
+- `src/components/sections/` – page sections
+- `src/config/site.ts` – site name, nav and links
 
-To learn more about Next.js, take a look at the following resources:
+## Branches
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `feature/*` – work in progress, gets a Vercel Preview
+- `dev` – staging, receives PRs from feature branches
+- `main` – production, receives PRs from `dev` only
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Secrets
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Never commit secrets. Local values go in `.env.local`, production values in Vercel Environment Variables. Keep variable names up to date in `.env.example`, without values.
