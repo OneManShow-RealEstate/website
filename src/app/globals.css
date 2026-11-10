@@ -160,6 +160,15 @@
 /* Keyframes for the home section animations.
    Dev note: Turbopack sometimes keeps serving an old build of this file;
    restart `npm run dev` if a change does not show up. */
+/* Chat bubbles in the agent section pop in as they "arrive" */
+@keyframes chat-in {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+    scale: 0.96;
+  }
+}
+
 @keyframes item-arrive {
   0% {
     opacity: 0;
