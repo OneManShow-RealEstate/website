@@ -7,9 +7,11 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-assistant);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-rubik);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,24 +51,29 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  /* Vanilla white surfaces, deep blue brand */
+  --background: oklch(0.975 0.018 90);
+  --foreground: oklch(0.22 0.03 260);
+  --card: oklch(0.99 0.01 90);
+  --card-foreground: oklch(0.22 0.03 260);
+  --popover: oklch(0.99 0.01 90);
+  --popover-foreground: oklch(0.22 0.03 260);
+  --primary: oklch(0.33 0.12 262);
+  --primary-foreground: oklch(0.975 0.018 90);
+  --secondary: oklch(0.94 0.025 88);
+  --secondary-foreground: oklch(0.22 0.03 260);
+  --muted: oklch(0.945 0.022 88);
+  --muted-foreground: oklch(0.5 0.025 80);
+  --accent: oklch(0.92 0.035 262);
+  --accent-foreground: oklch(0.33 0.12 262);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.89 0.025 85);
+  --input: oklch(0.89 0.025 85);
+  --ring: oklch(0.5 0.13 262);
+  /* Secondary accent: warm gold. For fills, badges and icons, not body text
+     (low contrast on vanilla); text on it uses the deep blue. */
+  --highlight: oklch(0.78 0.13 75);
+  --highlight-foreground: oklch(0.33 0.12 262);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -117,6 +124,126 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Custom animation helpers (rules). Keyframes are below, at the top level. */
+@layer components {
+  /* Scroll-in animation for <Reveal>. Without JS or with reduced motion, content just shows. */
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    [data-reveal] {
+      transition:
+        opacity 0.6s ease-out,
+        translate 0.6s ease-out;
+      transition-delay: var(--reveal-delay, 0ms);
+    }
+    [data-reveal="hidden"] {
+      opacity: 0;
+      translate: 0 1.5rem;
+    }
+
+    /* Leads board: the newest lead drops into "new" with a short gold flash */
+    [data-reveal="shown"] .lead-drop {
+      animation: lead-drop 0.7s ease-out 0.5s both;
+    }
+
+    /* Properties list: the newest synced item slides in from the sources side */
+    [data-reveal="shown"] .item-arrive {
+      animation: item-arrive 0.7s ease-out 0.8s both;
+    }
+
+    /* Flow steps light up one after another, in a loop. Needs --steps and --i. */
+    [data-reveal="shown"] .flow-step {
+      animation: flow-step calc(var(--steps) * 0.8s) ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.8s + 0.6s);
+    }
+  }
+}
+
+/* Keyframes for the home section animations.
+   Dev note: Turbopack sometimes keeps serving an old build of this file;
+   restart `npm run dev` if a change does not show up. */
+/* Chat bubbles in the agent section pop in as they "arrive" */
+@keyframes chat-in {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+    scale: 0.96;
+  }
+}
+
+@keyframes item-arrive {
+  0% {
+    opacity: 0;
+    translate: 1.5rem 0;
+    outline: 3px solid transparent;
+  }
+  60% {
+    opacity: 1;
+    translate: 0 0;
+    outline: 3px solid var(--highlight);
+  }
+  100% {
+    outline: 3px solid transparent;
+  }
+}
+
+@keyframes flow-step {
+  0%,
+  22%,
+  100% {
+    border-color: var(--border);
+    background-color: var(--card);
+  }
+  10% {
+    border-color: var(--highlight);
+    background-color: color-mix(in oklab, var(--highlight) 22%, var(--card));
+  }
+}
+
+/* Sync line in the properties section: down on mobile, sideways (right to left) on desktop */
+@keyframes travel-y {
+  0% {
+    translate: 0 0;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    translate: 0 calc(100% - 2rem);
+    opacity: 0;
+  }
+}
+@keyframes travel-x {
+  0% {
+    translate: 0 0;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    translate: calc(-100% + 2rem) 0;
+    opacity: 0;
+  }
+}
+
+@keyframes lead-drop {
+  0% {
+    opacity: 0;
+    translate: 0 -1rem;
+    outline: 3px solid transparent;
+  }
+  60% {
+    opacity: 1;
+    translate: 0 0;
+    outline: 3px solid var(--highlight);
+  }
+  100% {
+    outline: 3px solid transparent;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -124,7 +251,14 @@
   body {
     @apply bg-background text-foreground;
   }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading;
+  }
   html {
-    @apply font-sans;
+    /* scroll-pt-16 keeps anchor targets clear of the sticky header */
+    @apply font-sans scroll-pt-16 motion-safe:scroll-smooth;
   }
 }
