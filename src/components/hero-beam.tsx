@@ -6,7 +6,10 @@ import { forwardRef, useRef, type ComponentType, type RefObject } from "react";
 import { AnimatedBeam } from "@/components/ui/animated-beam";
 import { heroBeam } from "@/content/home";
 
-const icons: Record<(typeof heroBeam.tasks)[number]["icon"], ComponentType<{ className?: string }>> = {
+type Task = (typeof heroBeam.right | typeof heroBeam.left)[number];
+type Side = "right" | "left";
+
+const icons: Record<Task["icon"], ComponentType<{ className?: string }>> = {
   calendar: CalendarClock,
   clients: Users,
   inquiries: MessageCircle,
@@ -19,7 +22,7 @@ const icons: Record<(typeof heroBeam.tasks)[number]["icon"], ComponentType<{ cla
 const PRIMARY = "var(--primary)";
 const GOLD = "var(--highlight)";
 
-const Task = forwardRef<HTMLDivElement, { task: (typeof heroBeam.tasks)[number] }>(({ task }, ref) => {
+const TaskPill = forwardRef<HTMLDivElement, { task: Task }>(({ task }, ref) => {
   const Icon = icons[task.icon];
   return (
     <div
@@ -33,14 +36,12 @@ const Task = forwardRef<HTMLDivElement, { task: (typeof heroBeam.tasks)[number] 
     </div>
   );
 });
-Task.displayName = "Task";
+TaskPill.displayName = "TaskPill";
 
 // Everyday tasks on both sides, each connected to the brand in the middle by an animated beam.
 export function HeroBeam() {
   const containerRef = useRef<HTMLDivElement>(null);
   const centerRef = useRef<HTMLDivElement>(null);
-  const right = heroBeam.tasks.slice(0, 3);
-  const left = heroBeam.tasks.slice(3);
 
   return (
     <figure className="mx-auto w-full max-w-md">
@@ -52,8 +53,16 @@ export function HeroBeam() {
       >
         {/* First in the DOM, so on the right in RTL */}
         <div className="flex flex-col items-end gap-10">
-          {right.map((task, i) => (
-            <BeamedTask key={task.label} task={task} index={i} containerRef={containerRef} centerRef={centerRef} />
+          {heroBeam.right.map((task, i) => (
+            <BeamedTask
+              key={task.label}
+              task={task}
+              side="right"
+              row={i}
+              rows={heroBeam.right.length}
+              containerRef={containerRef}
+              centerRef={centerRef}
+            />
           ))}
         </div>
 
@@ -65,8 +74,16 @@ export function HeroBeam() {
         </div>
 
         <div className="flex flex-col items-start gap-10">
-          {left.map((task, i) => (
-            <BeamedTask key={task.label} task={task} index={i + 3} containerRef={containerRef} centerRef={centerRef} />
+          {heroBeam.left.map((task, i) => (
+            <BeamedTask
+              key={task.label}
+              task={task}
+              side="left"
+              row={i}
+              rows={heroBeam.left.length}
+              containerRef={containerRef}
+              centerRef={centerRef}
+            />
           ))}
         </div>
       </div>
@@ -77,28 +94,37 @@ export function HeroBeam() {
 // A task bubble plus its beam to the center. The beam's SVG is absolute, relative to the container.
 function BeamedTask({
   task,
-  index,
+  side,
+  row,
+  rows,
   containerRef,
   centerRef,
 }: {
-  task: (typeof heroBeam.tasks)[number];
-  index: number;
+  task: Task;
+  side: Side;
+  row: number;
+  rows: number;
   containerRef: RefObject<HTMLDivElement | null>;
   centerRef: RefObject<HTMLDivElement | null>;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  // Rows above the middle curve up, rows below curve down (0 for the middle one)
+  const middle = (rows - 1) / 2;
+  const curvature = (middle - row) * 40;
+  // Stagger the flashes across both columns
+  const order = side === "right" ? row : rows + row;
   return (
     <>
-      <Task ref={ref} task={task} />
+      <TaskPill ref={ref} task={task} />
       <AnimatedBeam
         containerRef={containerRef}
         fromRef={ref}
         toRef={centerRef}
         // Right-side tasks flow leftwards into the center, left-side ones rightwards
-        reverse={index < 3}
-        curvature={[40, 0, -40][index % 3]}
+        reverse={side === "right"}
+        curvature={curvature}
         duration={6}
-        delay={index * 0.8}
+        delay={order * 0.8}
         repeatDelay={0.5}
         pathColor={PRIMARY}
         pathOpacity={0.15}

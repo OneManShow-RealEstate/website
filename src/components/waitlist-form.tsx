@@ -62,7 +62,7 @@ export function WaitlistForm() {
       </fieldset>
 
       {/* Honeypot, hidden from people and screen readers */}
-      <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+      <input type="text" name="hp_extra" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
 
       <div>
         <label className="flex items-start gap-2 text-sm">

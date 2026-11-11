@@ -1,3 +1,4 @@
+import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { About } from "@/components/sections/about";
 import { Agent } from "@/components/sections/agent";
@@ -23,6 +24,7 @@ export default function Home() {
         <Audience />
         <Faq />
       </main>
+      <SiteFooter />
       <WaitlistDialog />
     </>
   );

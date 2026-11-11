@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { WaitlistForm } from "@/components/waitlist-form";
+import { siteConfig } from "@/config/site";
 import { waitlist } from "@/content/home";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
@@ -19,13 +20,13 @@ export function WaitlistDialog() {
     const onClick = (event: MouseEvent) => {
       // Leave Cmd/Ctrl/Shift/middle clicks to the browser (new tab or window)
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      const link = (event.target as Element).closest?.('a[href="#waitlist"]');
+      const link = (event.target as Element).closest?.(`a[href="${siteConfig.waitlistHref}"]`);
       if (!link) return;
       event.preventDefault();
       setOpen(true);
     };
     const onHash = () => {
-      if (location.hash === "#waitlist") setOpen(true);
+      if (location.hash === siteConfig.waitlistHref) setOpen(true);
     };
     document.addEventListener("click", onClick);
     window.addEventListener("hashchange", onHash);
@@ -41,7 +42,7 @@ export function WaitlistDialog() {
   const onOpenChange = (next: boolean) => {
     setOpen(next);
     // Drop #waitlist from the URL on close, so a refresh doesn't reopen it
-    if (!next && location.hash === "#waitlist") history.replaceState(null, "", location.pathname + location.search);
+    if (!next && location.hash === siteConfig.waitlistHref) history.replaceState(null, "", location.pathname + location.search);
   };
 
   if (isDesktop) {

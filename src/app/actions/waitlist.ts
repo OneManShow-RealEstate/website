@@ -2,6 +2,7 @@
 
 import { Resend } from "resend";
 
+import { waitlist } from "@/content/home";
 import { WAITLIST_LIMITS as LIMITS } from "@/lib/waitlist-limits";
 
 export type WaitlistState = {
@@ -12,7 +13,10 @@ export type WaitlistState = {
   values?: { name: string; phone: string; email: string; type: string; consent: boolean };
 };
 
-const TYPES = { independent: "מתווך עצמאי", office: "משרד תיווך" } as const;
+// Allowed "independent / office" values and their labels, from the form's own options
+const TYPES: Record<string, string> = Object.fromEntries(
+  waitlist.fields.type.options.map((option) => [option.value, option.label])
+);
 
 // Israeli mobile or landline, digits only after stripping spaces and dashes
 const PHONE = /^(?:\+972|0)(?:[23489]|5\d|7\d)\d{7}$/;
@@ -21,8 +25,11 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Waitlist sign-up: validates the form and emails the details to the team.
 // Needs RESEND_API_KEY and WAITLIST_TO_EMAIL (set in Vercel, see .env.example).
 export async function joinWaitlist(_prev: WaitlistState, formData: FormData): Promise<WaitlistState> {
-  // Honeypot: real people never fill this hidden field
-  if (formData.get("company")) return { status: "success" };
+  // Honeypot: real people never fill this hidden field (named so browser autofill skips it)
+  if (formData.get("hp_extra")) {
+    console.warn("Waitlist: honeypot filled, submission ignored");
+    return { status: "success" };
+  }
 
   const name = String(formData.get("name") ?? "").trim();
   const rawPhone = String(formData.get("phone") ?? "").trim();
@@ -48,7 +55,7 @@ export async function joinWaitlist(_prev: WaitlistState, formData: FormData): Pr
     return { status: "error", message: "משהו השתבש. נסו שוב בעוד כמה דקות.", values };
   }
 
-  const typeLabel = TYPES[type as keyof typeof TYPES];
+  const typeLabel = TYPES[type];
   const { error } = await new Resend(apiKey).emails.send({
     // Resend's shared sender; switch to our own domain once it's verified
     from: "One Man Show <onboarding@resend.dev>",

@@ -1,24 +1,28 @@
 // Home page copy. Draft – to be reviewed, and updated as the app evolves.
 
+import { siteConfig } from "@/config/site";
+
 export const hero = {
   eyebrow: "לניסיון חינם לחודש",
   title: "כל המשרד שלך, בתוך הוואטסאפ",
   subtitle:
     "סוכן AI שעונה לפניות, מתעד לקוחות ושיחות ומנהל את העסקאות, מתוך הוואטסאפ שכבר עובד בשבילך. הכול מרוכז באפליקציה אחת.",
-  primaryCta: { label: "הצטרפות לרשימת ההמתנה", href: "#waitlist" },
+  primaryCta: { label: "הצטרפות לרשימת ההמתנה", href: siteConfig.waitlistHref },
   secondaryCta: { label: "איך זה עובד", href: "#how-it-works" },
   note: "חודש ניסיון ללא עלות. בלי כרטיס אשראי.",
 };
 
 // Hero illustration: everyday broker tasks, all flowing into the brand at the center.
-// First three sit on the right (RTL), last three on the left.
+// "right" and "left" are the two columns around the center (as seen, RTL).
 export const heroBeam = {
   center: "One Man Show",
   label: "המחשה: קביעת פגישות, ניהול לקוחות, מענה לפניות, ניהול נכסים, תזכורות וסיכום שיחות, כולם מתחברים ל‑One Man Show.",
-  tasks: [
+  right: [
     { icon: "calendar", label: "קביעת פגישות" },
     { icon: "clients", label: "ניהול לקוחות" },
     { icon: "inquiries", label: "מענה לפניות" },
+  ],
+  left: [
     { icon: "properties", label: "ניהול נכסים" },
     { icon: "reminders", label: "תזכורות" },
     { icon: "notes", label: "סיכום שיחות" },
@@ -205,7 +209,7 @@ export const howItWorks = {
       },
     },
   ],
-  cta: { label: "הצטרפות לרשימת ההמתנה", href: "#waitlist" },
+  cta: { label: "הצטרפות לרשימת ההמתנה", href: siteConfig.waitlistHref },
 } as const;
 
 export const audience = {
@@ -322,7 +326,7 @@ export const faq = {
         },
         {
           q: "אפשר למחוק את המידע?",
-          a: "כן. פונים אלינו ומבקשים, ונמחק את המידע שלכם.",
+          a: "כן. מבקשים מאיתנו, למשל כשנחזור אליכם אחרי ההרשמה, ונמחק את המידע שלכם.",
         },
       ],
     },
