@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -8,9 +9,14 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        {/* Text logo until a real logo exists */}
-        <Link href="/" className="text-lg font-bold tracking-tight">
-          {siteConfig.name}
+        <Link href="/" className="shrink-0">
+          <Image
+            {...siteConfig.logo.horizontal}
+            alt={siteConfig.name}
+            loading="eager"
+            fetchPriority="high"
+            className="h-9 w-auto sm:h-10"
+          />
         </Link>
         <a href={hero.primaryCta.href} className={buttonVariants()}>
           {hero.primaryCta.label}

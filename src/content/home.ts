@@ -15,7 +15,6 @@ export const hero = {
 // Hero illustration: everyday broker tasks, all flowing into the brand at the center.
 // "right" and "left" are the two columns around the center (as seen, RTL).
 export const heroBeam = {
-  center: "One Man Show",
   label: "המחשה: קביעת פגישות, ניהול לקוחות, מענה לפניות, ניהול נכסים, תזכורות וסיכום שיחות, כולם מתחברים ל‑One Man Show.",
   right: [
     { icon: "calendar", label: "קביעת פגישות" },
