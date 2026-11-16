@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Assistant, Geist_Mono, Rubik } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
@@ -20,9 +20,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Icons (favicon.ico, icon.svg, apple-icon.png), the share image (opengraph-image.png) and
+// the app manifest (manifest.ts) live in src/app, so Next.js adds their <head> tags on its own.
 export const metadata: Metadata = {
-  title: siteConfig.name,
+  metadataBase: new URL(siteConfig.url),
+  title: { default: siteConfig.name, template: `%s · ${siteConfig.name}` },
   description: siteConfig.description,
+  openGraph: {
+    type: "website",
+    locale: "he_IL",
+    siteName: siteConfig.name,
+    title: siteConfig.name,
+    description: siteConfig.description,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: siteConfig.themeColor,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { TokenValue } from "@/components/token-value";
 import { buttonVariants } from "@/components/ui/button";
+import { siteConfig } from "@/config/site";
 
-// Internal brand kit: palette and typography. Source of truth for values is globals.css.
+// Internal brand kit: logo, palette and typography. Source of truth for values is globals.css.
 export const metadata: Metadata = {
   title: "Style guide",
   robots: { index: false, follow: false },
@@ -38,8 +40,26 @@ export default function StyleGuide() {
     <main className="mx-auto w-full max-w-5xl px-4 py-16">
       <h1 className="text-4xl font-extrabold">קיט מותג</h1>
       <p className="mt-3 text-lg text-muted-foreground">
-        פלטת צבעים וטיפוגרפיה של One Man Show. הערכים מוגדרים ב‑<code dir="ltr" className="font-mono text-sm">globals.css</code>.
+        לוגו, פלטת צבעים וטיפוגרפיה של One Man Show. הערכים מוגדרים ב‑<code dir="ltr" className="font-mono text-sm">globals.css</code>.
       </p>
+
+      <section className="mt-16">
+        <h2 className="text-3xl font-bold">לוגו</h2>
+        <p className="mt-3 text-muted-foreground">
+          הקבצים המלאים בקיט הלוגו. רוחב מינימלי ללוגו האופקי 120px, מתחת לזה רק הסמל.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <div className="flex items-center justify-center rounded-2xl border bg-card p-8 sm:col-span-2">
+            <Image {...siteConfig.logo.horizontal} alt="לוגו אופקי על רקע בהיר" className="h-16 w-auto" />
+          </div>
+          <div className="flex items-center justify-center rounded-2xl border bg-card p-8">
+            <Image {...siteConfig.logo.mark} alt="הסמל לבד" className="size-20" />
+          </div>
+          <div className="flex items-center justify-center rounded-2xl bg-primary p-8 sm:col-span-3">
+            <Image {...siteConfig.logo.horizontalOnDark} alt="לוגו אופקי על רקע כהה" className="h-16 w-auto" />
+          </div>
+        </div>
+      </section>
 
       <section className="mt-16">
         <h2 className="text-3xl font-bold">פלטת צבעים</h2>
