@@ -1,9 +1,11 @@
 "use client";
 
 import { BellRing, CalendarClock, House, MessageCircle, NotebookPen, Users } from "lucide-react";
+import Image from "next/image";
 import { forwardRef, useRef, type ComponentType, type RefObject } from "react";
 
 import { AnimatedBeam } from "@/components/ui/animated-beam";
+import { siteConfig } from "@/config/site";
 import { heroBeam } from "@/content/home";
 
 type Task = (typeof heroBeam.right | typeof heroBeam.left)[number];
@@ -68,9 +70,10 @@ export function HeroBeam() {
 
         <div
           ref={centerRef}
-          className="relative z-10 flex size-20 shrink-0 items-center justify-center rounded-full bg-primary p-2 text-center font-heading text-xs leading-tight font-bold text-primary-foreground shadow-lg ring-4 ring-highlight/40 sm:size-24 sm:text-sm"
+          className="relative z-10 flex size-20 shrink-0 items-center justify-center rounded-full border bg-card p-3 shadow-lg ring-4 ring-highlight/40 sm:size-24"
         >
-          {heroBeam.center}
+          {/* Above the fold: load right away so the beams never point at an empty circle */}
+          <Image {...siteConfig.logo.mark} alt="" loading="eager" className="size-full" />
         </div>
 
         <div className="flex flex-col items-start gap-10">

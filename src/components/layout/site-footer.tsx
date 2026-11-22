@@ -1,4 +1,5 @@
 import { Mail, MessageCircle, Phone } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { siteConfig } from "@/config/site";
 import { footer } from "@/content/footer";
 import { cn } from "@/lib/utils";
 
-// Based on shadcnblocks Footer2, restyled for the brand: deep blue background, text logo,
+// Based on shadcnblocks Footer2, restyled for the brand: deep blue background, logo,
 // a waitlist button, and a contact column (plain text while the details are placeholders).
 export function SiteFooter() {
   const { contact } = siteConfig;
@@ -22,9 +23,8 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-10 lg:grid-cols-6">
           {/* Brand: first in the DOM, so on the right in RTL */}
           <div className="col-span-2">
-            <Link href="/" className="inline-flex items-center gap-2 font-heading text-2xl font-bold">
-              <span className="size-2.5 rounded-full bg-highlight" aria-hidden="true" />
-              {siteConfig.name}
+            <Link href="/" className="inline-block">
+              <Image {...siteConfig.logo.horizontalOnDark} alt={siteConfig.name} className="h-12 w-auto" />
             </Link>
             <p className="mt-4 max-w-xs leading-relaxed text-primary-foreground/75">{footer.description}</p>
             <a
